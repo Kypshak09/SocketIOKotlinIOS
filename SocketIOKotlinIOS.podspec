@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'SocketIOKotlinIOS'
-  s.version          = '0.1.0'
+  s.version          = '0.2.0'
   s.summary          = 'SocketIOKotlinIOS for KMM project.'
 
 
@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '10.0'
 
-  s.source_files = 'SocketIOKotlinIOS/Classes/**/*'
+  s.source_files = 'SocketIOKotlinIOS/Classes/**/*.swift'
   s.swift_version = '5.0'
    s.dependency  'Socket.IO-Client-Swift', '~> 16.0'
 end
