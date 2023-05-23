@@ -8,6 +8,6 @@ target 'SocketIOKotlinIOS_Example' do
   target 'SocketIOKotlinIOS_Tests' do
     inherit! :search_paths
 
-    
+    pod 'Socket.IO-Client-Swift', '~> 16.0'
   end
 end
