@@ -1,10 +1,12 @@
 Pod::Spec.new do |s|
   s.name             = 'SocketIOKotlinIOS'
-  s.version          = '0.2.0'
+  s.version          = '0.3.0'
   s.summary          = 'SocketIOKotlinIOS for KMM project.'
 
 
   s.description      =  'SocketIOKotlinIOS for KMM projects for iosMain'
+  
+  s.module_name      =  '#{s.name}'
 
   s.homepage         = 'https://github.com/Kypshak09/SocketIOKotlinIOS'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }

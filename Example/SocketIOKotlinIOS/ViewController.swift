@@ -7,12 +7,19 @@
 //
 
 import UIKit
+import SocketIOKotlinIOS
+
 
 class ViewController: UIViewController {
 
+    var socket = SocketIo(endpoint: <#T##String#>, queryParams: <#T##[String : Any]?#>, transport: <#T##SocketIoTransport#>)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        socket.connect()
+        socket.disconnect()
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
