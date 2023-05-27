@@ -165,8 +165,19 @@ public class SocketIo: NSObject {
         return listeners[event]?.isEmpty == false
     }
     
+//    @objc
+//    public func turnOffListener(event: String, action: @escaping (String) -> Void) {
+//
+//        if let listenersForEvent = listeners[event] {
+//                for uuid in listenersForEvent {
+//                    socket.off(id: uuid)
+//                }
+//                listeners.removeValue(forKey: event)
+//            }
+//    }
+    
     @objc
-    public func turnOffListener(event: String, action: @escaping (String) -> Void) {
+    public func off(event: String, action: @escaping (String) -> Void) {
         
         if let listenersForEvent = listeners[event] {
                 for uuid in listenersForEvent {
@@ -176,11 +187,11 @@ public class SocketIo: NSObject {
             }
     }
     
-    @objc
-    public func off(e: String, id: UUID) {
-        socket.off(e)
-        listeners[e]?.removeAll {$0 == id}
-    }
+//    @objc
+//    public func off(e: String, id: UUID) {
+//        socket.off(e)
+//        listeners[e]?.removeAll {$0 == id}
+//    }
 }
 
 private extension UUID {
