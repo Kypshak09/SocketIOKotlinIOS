@@ -166,7 +166,7 @@ public class SocketIo: NSObject {
     }
     
     @objc
-    public func offEvent(event: String, action: @escaping (String) -> Void) {
+    public func turnOff(event: String, action: @escaping (String) -> Void) {
         
         if let listenersForEvent = listeners[event] {
                 for uuid in listenersForEvent {
