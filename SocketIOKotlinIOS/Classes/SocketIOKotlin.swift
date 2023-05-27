@@ -166,6 +166,17 @@ public class SocketIo: NSObject {
     }
     
     @objc
+    public func off(event: String, action: @escaping (Array<Any>) -> Void) {
+        
+        if let listenersForEvent = listeners[event] {
+                for uuid in listenersForEvent {
+                    socket.off(id: uuid)
+                }
+                listeners.removeValue(forKey: event)
+            }
+    }
+    
+    @objc
     public func off(event: String, id: UUID) {
         socket.off(event)
         listeners[event]?.removeAll {$0 == id}
