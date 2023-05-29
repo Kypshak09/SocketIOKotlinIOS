@@ -68,9 +68,7 @@ public class SocketIo: NSObject {
   }
   
   @objc
-  public func on(event: String, action: @escaping (String) -> Void) {
-    // FIXME сейчас получается что SocketIo десериализует строку в json (dictionary), а мы после этого сериализуем обратно в строку, чтобы на уровне общей логики мультиплатформенный json парсер спарсил данные (результат парсинга iOS и Android варианта socketio разный - приводить к общему виду проблемно, проще в json вернуть и в общем коде преобразовать)
-      
+  public func on(event: String, action: @escaping (Any) -> Void) {      
       let uuid = socket.on(event) { data, emitter in
           guard !data.isEmpty else {
               print("No data received")
@@ -78,7 +76,7 @@ public class SocketIo: NSObject {
           }
           
           do {
-              let jsonData = try JSONSerialization.data(withJSONObject: data[0], options: .prettyPrinted)
+              let jsonData = try JSONSerialization.data(withJSONObject: data[0], options: [])
               if let jsonString = String(data: jsonData, encoding: .utf8) {
                   action(jsonString)
               } else {
