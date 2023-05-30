@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'SocketIOKotlinIOS'
-  s.version          = '0.5.7'
+  s.version          = '0.5.8'
   s.summary          = 'SocketIOKotlinIOS for KMM project.'
 
 

@@ -67,32 +67,15 @@ public class SocketIo: NSObject {
     return socket.status == SocketIOStatus.connected
   }
   
-  @objc
-  public func on(event: String, action: @escaping (Any) -> Void) {      
-      let uuid = socket.on(event) { data, emitter in
-          guard !data.isEmpty else {
-              print("No data received")
-              return
-          }
-          
-          do {
-              let jsonData = try JSONSerialization.data(withJSONObject: data[0], options: [])
-              if let jsonString = String(data: jsonData, encoding: .utf8) {
-                  action(jsonString)
-              } else {
-                  print("Failed to convert jsonData to string")
-              }
-          } catch {
-              print("JSON serialization error \(error)")
-          }
-      }
-      
-      if listeners[event] != nil {
-              listeners[event]?.append(uuid)
-          } else {
-              listeners[event] = [uuid]
-          }
-  }
+    @objc
+    public func on(event: String, action: @escaping ([Any]) -> Void) {
+        var listenersForEvent = listeners[event] ?? []
+        let uuid = socket.on(event) { data, ack in
+            action(data)
+        }
+        listenersForEvent.append(uuid)
+        listeners[event] = listenersForEvent
+    }
   
   @objc
   public func on(socketEvent: SocketEvent, action: @escaping (Array<Any>) -> Void) {
