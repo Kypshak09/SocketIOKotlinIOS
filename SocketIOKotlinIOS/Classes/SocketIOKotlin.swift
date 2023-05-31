@@ -49,7 +49,7 @@ public class SocketIo: NSObject {
     
     socketManager = SocketManager(socketURL: URL(string: endpoint)!,
                                   config: configuration)
-    socket = socketManager.defaultSocket
+      socket = socketManager.socket(forNamespace: "operator")
   }
   
   @objc
