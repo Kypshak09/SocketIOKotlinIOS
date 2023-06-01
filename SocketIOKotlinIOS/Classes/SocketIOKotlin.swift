@@ -68,13 +68,20 @@ public class SocketIo: NSObject {
   }
   
     @objc
-    public func on(event: String, action: @escaping ([Any]) -> Void) {
-        var listenersForEvent = listeners[event] ?? []
-        let uuid = socket.on(event) { data, ack in
-            action(data)
+    public func on(event: String, action: @escaping (String) -> Void) {
+      // FIXME сейчас получается что SocketIo десериализует строку в json (dictionary), а мы после этого сериализуем обратно в строку, чтобы на уровне общей логики мультиплатформенный json парсер спарсил данные (результат парсинга iOS и Android варианта socketio разный - приводить к общему виду проблемно, проще в json вернуть и в общем коде преобразовать)
+        
+        let uuid = socket.on(event) { data, emitter in
+            let jsonData = try! JSONSerialization.data(withJSONObject: data[0], options: .prettyPrinted)
+            let jsonString = String(data:jsonData, encoding: .utf8)!
+            let _ = action(jsonString)
         }
-        listenersForEvent.append(uuid)
-        listeners[event] = listenersForEvent
+        
+        if listeners[event] != nil {
+                listeners[event]?.append(uuid)
+            } else {
+                listeners[event] = [uuid]
+            }
     }
   
   @objc
@@ -170,14 +177,9 @@ public class SocketIo: NSObject {
 //    }
     
     @objc
-    public func off(event: String, action: @escaping (String) -> Void) {
-        
-        if let listenersForEvent = listeners[event] {
-                for uuid in listenersForEvent {
-                    socket.off(id: uuid)
-                }
-                listeners.removeValue(forKey: event)
-            }
+    public func off(event: String, id: UUID) {
+        socket.off(event)
+        listeners[event]?.removeAll {$0 == id}
     }
     
 //    @objc
