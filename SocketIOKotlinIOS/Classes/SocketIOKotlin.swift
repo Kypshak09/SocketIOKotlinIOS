@@ -136,29 +136,40 @@ public class SocketIo: NSObject {
       }
   }
   
-  @objc
-  public func emit(event: String, data: Array<Any>) {
-    var result = Array<Any>()
-    for i in (0...(data.count - 1)) {
-      let item = data[i]
-      if let itemData = (item as? String)?.data(using: .utf8) {
-        do {
-          let itemObject = try JSONSerialization.jsonObject(with: itemData, options: []) as? [String: Any]
-            result.append(itemObject as Any)
-        } catch {
-          print(error.localizedDescription)
+    @objc
+    public func emit(event: String, data: Array<String>) {
+        var result = Array<SocketData>()
+        for item in data {
+            if let itemData = item.data(using: .utf8) {
+                do {
+                    if let itemObject = try JSONSerialization.jsonObject(with: itemData, options: []) as? NSDictionary {
+                        result.append(itemObject as SocketData)
+                    }
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
         }
-      } else {
-        result.append(item)
-      }
+        socket.emit(event, with: result, completion: nil)
     }
-      socket.emit(event, with: [result], completion: nil)
-  }
-  
-  @objc
-  public func emit(event: String, string: String) {
-      socket.emit(event, with: [string], completion: nil)
-  }
+
+    @objc
+    public func emit(event: String, dataString: String) {
+        if let data = dataString.data(using: .utf8) {
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    socket.emit(event, with: [json], completion: nil)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+
+    @objc
+    public func emit(event: String, string: String) {
+        socket.emit(event, with: [string], completion: nil)
+    }
     
     @objc
     public func hasListeners(event: String) -> Bool {
@@ -175,18 +186,6 @@ public class SocketIo: NSObject {
                 listeners.removeValue(forKey: event)
             }
     }
-    
-//    @objc
-//    public func off(event: String, id: UUID) {
-//        socket.off(event)
-//        listeners[event]?.removeAll {$0 == id}
-//    }
-    
-//    @objc
-//    public func off(e: String, id: UUID) {
-//        socket.off(e)
-//        listeners[e]?.removeAll {$0 == id}
-//    }
 }
 
 private extension UUID {
